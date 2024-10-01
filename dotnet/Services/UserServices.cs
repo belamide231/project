@@ -1,18 +1,18 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
+using MongoDB.Bson;
 using MongoDB.Driver;
+
 
 public class UserServices {
 
     
     private readonly Mongo _mongo;
-    private readonly Redis _redis;
     private readonly UserManager<ApplicationUsers> _userManager;
 
 
-    public UserServices(Mongo mongo, Redis redis, UserManager<ApplicationUsers> userManager) {
+    public UserServices(Mongo mongo, UserManager<ApplicationUsers> userManager) {
         _mongo = mongo;
-        _redis = redis;
         _userManager = userManager;
     }
 
@@ -32,12 +32,10 @@ public class UserServices {
         var user = await _userManager.FindByNameAsync(DTO.Username);
         if(user == null) 
             return new LoginResult.LoginFail(LoginResult.InvalidUsername);
-        
+
         var locked = await _userManager.IsLockedOutAsync(user);
-        if(locked) {
-            var remaining = await _userManager.GetLockoutEndDateAsync(user) - DateTimeOffset.UtcNow;
-            return new LoginResult.AccountLocked(remaining.ToString()!);
-        }
+        if(locked) 
+            return new LoginResult.AccountLocked((user.LockoutEnd - DateTimeOffset.UtcNow).ToString()!);
 
         var match = await _userManager.CheckPasswordAsync(user, DTO.Password);
         if(!match) {
@@ -45,12 +43,16 @@ public class UserServices {
             return new LoginResult.LoginFail(LoginResult.IncorrectPassword);
         }
 
-        var auth = new AuthorizationSchema("", "");
+        var auth = new AuthorizationSchema(DTO.Device, DTO.Location);
+        var query = await _mongo.F_UsersCollection().FindOneAndUpdateAsync(
+            Builders<ApplicationUsers>.Filter.Eq(f => f.Id, user.Id), 
+            Builders<ApplicationUsers>.Update.Push(f => f.Authorization, auth)
+        );
 
-        var update = Builders<ApplicationUsers>.Update.Push(f => f.Authorization, auth);
-        //var stored = await _mongo.F_UsersCollection().FindOneAndUpdateAsync();        
+        if(query == null) 
+            return new LoginResult.InternalServerError(LoginResult.InternalServerIsError);
 
-        Console.WriteLine(JwtHelper.F_Tokenize(user.Id.ToString(), auth.AuthorizationID, auth.AuthorizationKey));
-        return new StatusModel(StatusCodes.Status200OK);
+        await _userManager.ResetAccessFailedCountAsync(user);
+        return new LoginResult.LoginSuccess(JwtHelper.F_Tokenize(user.Id.ToString(), auth.AuthorizationID, auth.AuthorizationKey));
     }
 }

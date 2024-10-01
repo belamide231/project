@@ -35,31 +35,32 @@ public class Websocket : JwtHelper {
     }
 
 
+    public async Task BadResponse(HttpContext context) {
+        context.Response.StatusCode = StatusCodes.Status400BadRequest;
+        await _next(context);
+        return;
+    }
+
+
     public async Task InvokeAsync(HttpContext context) {
 
-        if(context.Request.Path == "/connect" && context.WebSockets.IsWebSocketRequest) {
+        if(context.Request.Path == "/chat" && context.WebSockets.IsWebSocketRequest) {
 
             var userId = context.User.FindFirst(f => f.Type == _userId)?.Value;
 
             var websocket = await context.WebSockets.AcceptWebSocketAsync();
-            if(websocket.State != WebSocketState.Open) {
-                context.Response.StatusCode = StatusCodes.Status400BadRequest;
-                await _next(context);
-            }
+            if(websocket.State != WebSocketState.Open) 
+                await BadResponse(context);
 
             var websocketId = Guid.NewGuid().ToString() + DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
 
-            if(_users.TryGetValue(userId!, out var websockets)) {
 
-                websockets.TryAdd(websocketId, websocket);
+            var userWebsockets = _users.GetOrAdd(userId, _ => new ConcurrentDictionary<string, WebSocket>());
+            var websocketAdded = userWebsockets.TryAdd(websocketId, websocket);
+            var overrideResult = _users.TryUpdate(userId, );
 
-            } else {
-
-                var newWebsocket = new ConcurrentDictionary<string, WebSocket>();
-                newWebsocket.TryAdd(websocketId, websocket);
-                
-                _users.TryAdd(userId!, newWebsocket);
-            }
+            if (!websocketAdded)
+                await BadResponse(context);
 
             await ConnectAsync(userId!, websocketId, websocket);
 

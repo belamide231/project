@@ -15,9 +15,12 @@ public class WebsocketAuthorization {
 
     public async Task InvokeAsync(HttpContext context) {
 
-        var authorization = await _authorize.AuthorizeAsync(context.User, null, KeyRequirement._policy);
-        if(!authorization.Succeeded)
-            context.Response.StatusCode = StatusCodes.Status403Forbidden;
+        if(context.WebSockets.IsWebSocketRequest) {
+
+            var authorization = await _authorize.AuthorizeAsync(context.User, null, KeyRequirement._policy);
+            if(!authorization.Succeeded)
+                context.Response.StatusCode = StatusCodes.Status403Forbidden;
+        }
 
         await _next(context);
     }

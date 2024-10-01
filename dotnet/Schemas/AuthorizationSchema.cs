@@ -1,6 +1,5 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using Newtonsoft.Json.Converters;
 
 public class AuthorizationSchema {
 
@@ -20,7 +19,7 @@ public class AuthorizationSchema {
     public string HashedAuthorizationKey { get; set; }
 
     [BsonIgnore]
-    public string AuthorizationKey { get; set; }
+    public string AuthorizationKey;
 
     public AuthorizationSchema(string loginDevice, string loginLocation) {
 

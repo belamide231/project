@@ -3,7 +3,7 @@ using AspNetCore.Identity.Mongo.Model;
 
 public class ApplicationUsers : MongoUser {
 
-    public AuthorizationSchema Authorization { get; set; }
+    public List<AuthorizationSchema> Authorization { get; set; } = new List<AuthorizationSchema>();
 
     public ApplicationUsers(string email)  {
         Email = email;

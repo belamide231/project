@@ -1,16 +1,23 @@
-using System.Security.Cryptography.X509Certificates;
+using dotenv.net;
 using Microsoft.AspNetCore.Authorization;
+using MongoDB.Bson;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 
 
 public class KeyHandler : AuthorizationHandler<KeyRequirement> {
 
 
+    private readonly int _duration;
     private readonly Mongo _mongo;
     private readonly Redis _redis;
 
 
     public KeyHandler(Mongo mongo, Redis redis) {
+
+        DotEnv.Load();
+
+        _duration = int.TryParse(Environment.GetEnvironmentVariable("CACHE_DURATION"), out var Parsed) ? Parsed : 60;
         _mongo = mongo;
         _redis = redis;
     }
@@ -18,9 +25,43 @@ public class KeyHandler : AuthorizationHandler<KeyRequirement> {
 
     protected async override Task HandleRequirementAsync(AuthorizationHandlerContext context, KeyRequirement requirement) {
 
-        var userId = context.User.FindFirst(f => f.Type == JwtHelper._authId);
-        var authId = context.User.FindFirst(f => f.Type == JwtHelper._authId);
-        var authKey = context.User.FindFirst(f => f.Type == JwtHelper._authKey);
+        var userId = context.User.FindFirst(f => f.Type == JwtHelper._userId)?.Value;
+        var authId = context.User.FindFirst(f => f.Type == JwtHelper._authId)?.Value;
+        var authKey = context.User.FindFirst(f => f.Type == JwtHelper._authKey)?.Value;
 
+        if(string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(authId) || string.IsNullOrEmpty(authKey)) {
+            context.Fail();
+            return;
+        }
+
+        var redisQuery = await _redis.F_Authorizations().StringGetAsync(authId);
+        if(!string.IsNullOrEmpty(redisQuery) && XxhashHelper.Verify(authKey, redisQuery!)) {
+            await _redis.F_Authorizations().KeyExpireAsync(authId, TimeSpan.FromMinutes(_duration));
+            context.Succeed(requirement);
+            return;
+        }
+
+        var mongoQuery = await _mongo.F_UsersCollection().Find(
+            Builders<ApplicationUsers>.Filter.And(
+                Builders<ApplicationUsers>.Filter.Eq(f => f.Id, new ObjectId(userId)),
+                Builders<ApplicationUsers>.Filter.ElemMatch(f => f.Authorization,
+                    Builders<AuthorizationSchema>.Filter.Eq(f => f.AuthorizationID, authId)
+                )
+            )
+        ).Project<ApplicationUsers>(
+            Builders<ApplicationUsers>.Projection.ElemMatch(f => f.Authorization, 
+                Builders<AuthorizationSchema>.Filter.Eq(f => f.AuthorizationID, authId)
+            )
+            .Exclude(f => f.Id)
+        ).FirstOrDefaultAsync();
+
+        if(mongoQuery == null || !XxhashHelper.Verify(authKey, mongoQuery.Authorization.FirstOrDefault()!.HashedAuthorizationKey)) {
+            context.Fail();
+            return;
+        }
+
+        await _redis.F_Authorizations().StringSetAsync(authId, mongoQuery.Authorization.FirstOrDefault()!.HashedAuthorizationKey, TimeSpan.FromMinutes(_duration));
+        context.Succeed(requirement);
+        return;
     }
 }

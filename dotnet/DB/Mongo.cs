@@ -1,4 +1,5 @@
 using dotenv.net;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 public class Mongo {
@@ -17,5 +18,7 @@ public class Mongo {
 
 
     public IMongoCollection<ApplicationUsers> F_UsersCollection() => _mongo.GetCollection<ApplicationUsers>(_mongoUsers);
+    public IMongoCollection<BsonDocument> F_UserCollectionDocument() => _mongo.GetCollection<BsonDocument>(_mongoUsers);
+    
     public IMongoCollection<ApplicationRoles> F_RolesCollection() => _mongo.GetCollection<ApplicationRoles>(_mongoRoles);
 }
