@@ -7,7 +7,7 @@ public class HomeController : Controller {
 
 
     [Authorize]
-    [Authorize(Policy = "CERTIFIED_USER")]
+    [Authorize(policy: KeyRequirement._policy)]
     [HttpGet("/")]
     public IActionResult Home() => Content("YOU ARE AUTHORIZED");
 }

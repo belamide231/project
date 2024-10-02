@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 
 // TEMPORARY ONLY FOR TESTING API
 
+
+[Route("api/[controller]")]
+[ApiController]
 public class UserController : ControllerBase {
 
 

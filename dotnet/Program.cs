@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson;
+using MongoDB.Driver;
 
 
 DotEnv.Load();
@@ -29,6 +30,7 @@ builder.Services.AddSingleton<Mongo>();
 builder.Services.AddSingleton<Redis>();
 builder.Services.AddSingleton<IAuthorizationHandler, KeyHandler>();
 builder.Services.AddTransient<UserServices>();
+builder.Services.AddTransient<MessageServices>();
 
 
 builder.Services.AddCors(option => {
