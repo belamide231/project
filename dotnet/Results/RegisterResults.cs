@@ -13,10 +13,10 @@ public class RegisterResults {
 
     public class RegisterSuccess : StatusModel {
         public bool Registration { get; set; }
-        public Credential Credential { get; set; }
+        public CredentialModel Credential { get; set; }
         public RegisterSuccess(string email, string password) : base(StatusCodes.Status200OK) {
             Registration = true;
-            Credential = new Credential(email, password);
+            Credential = new CredentialModel(email, password);
         }
     }
 }

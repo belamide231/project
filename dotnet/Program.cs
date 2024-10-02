@@ -10,20 +10,18 @@
 
 using System.Text;
 using AspNetCore.Identity.Mongo;
-using dotenv.net;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson;
-using MongoDB.Driver;
 
 
-DotEnv.Load();
+new DotEnvHelper();
 
 
 var builder = WebApplication.CreateBuilder(args);
-builder.WebHost.UseUrls(Environment.GetEnvironmentVariable("URL")!);
+builder.WebHost.UseUrls(DotEnvHelper.Url!);
 
 
 builder.Services.AddSingleton<Mongo>();
@@ -43,7 +41,7 @@ builder.Services.AddCors(option => {
 builder.Services.AddIdentityCore<ApplicationUsers>()
                 .AddRoles<ApplicationRoles>()
                 .AddMongoDbStores<ApplicationUsers, ApplicationRoles, ObjectId>(option => {
-                    option.ConnectionString = Environment.GetEnvironmentVariable("MONGO");
+                    option.ConnectionString = DotEnvHelper.MongoDbUrl!;
                     option.UsersCollection = Mongo._mongoUsers;
                     option.RolesCollection = Mongo._mongoRoles;
                 });
@@ -56,7 +54,8 @@ builder.Services.AddAuthentication(option => {
         ValidateIssuer = false,
         ValidateAudience = false,
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY")!))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(DotEnvHelper.JwtKey!)),
+        ClockSkew = TimeSpan.Zero
     };
 }).AddBearerToken(IdentityConstants.BearerScheme);
 builder.Services.AddControllersWithViews();

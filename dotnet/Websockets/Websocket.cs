@@ -8,8 +8,8 @@ public class Websocket : JwtHelper {
 
 
     private static ConcurrentDictionary<string, ConcurrentDictionary<string, WebSocket>>? _users;
-    private readonly RequestDelegate _next;
-    private readonly byte[] _buffer;
+    private RequestDelegate _next;
+    private byte[] _buffer;
 
 
     public Websocket(RequestDelegate next) {
@@ -46,29 +46,20 @@ public class Websocket : JwtHelper {
     }
 
 
-    public async Task BadResponse(HttpContext context) {
-        context.Response.StatusCode = StatusCodes.Status400BadRequest;
-        await _next(context);
-        return;
-    }
-
-
     public async Task InvokeAsync(HttpContext context) {
 
         if(context.Request.Path == "/chat" && context.WebSockets.IsWebSocketRequest) {
 
-            var userId = context.User.FindFirst(f => f.Type == _userId)?.Value;
-
-            if(string.IsNullOrEmpty(userId))
-                await BadResponse(context);
-
-            var websocket = await context.WebSockets.AcceptWebSocketAsync();
-            if(websocket.State != WebSocketState.Open) 
-                await BadResponse(context);
-
+            var userId = context.User.FindFirst(f => f.Type == _userId)!.Value;
             var websocketId = Guid.NewGuid().ToString() + DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
+            var websocket = await context.WebSockets.AcceptWebSocketAsync();
 
-            _users!.AddOrUpdate(userId!, new ConcurrentDictionary<string, WebSocket>(new [] {
+            if(websocket.State != WebSocketState.Open) {
+                context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                return;
+            }
+
+            _users!.AddOrUpdate(userId, new ConcurrentDictionary<string, WebSocket>(new [] {
                 new KeyValuePair<string, WebSocket>(websocketId, websocket)
             }), (_, value) => {
                 value.TryAdd(websocketId, websocket);

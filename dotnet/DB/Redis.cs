@@ -6,18 +6,21 @@ public class Redis {
 
     private readonly IDatabase _authorizations;
     private readonly IDatabase _conversations;
+    private readonly IDatabase _userinfo;
 
     
     public Redis() {
 
         DotEnv.Load();
 
-        var redis = ConnectionMultiplexer.Connect(Environment.GetEnvironmentVariable("REDIS")!);
+        var redis = ConnectionMultiplexer.Connect(DotEnvHelper.RedisDbUrl!);
         _authorizations = redis.GetDatabase(0);
-        _conversations = redis.GetDatabase(1);
+        _userinfo = redis.GetDatabase(1);
+        _conversations = redis.GetDatabase(2);
     }
 
     
     public IDatabase F_Authorizations() => _authorizations;
+    public IDatabase F_UserInfo() => _userinfo;
     public IDatabase F_Conversations() => _conversations; 
 }

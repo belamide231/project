@@ -15,8 +15,7 @@ public class MessageController : ControllerBase {
     [Authorize(policy: KeyRequirement._policy)]
     [HttpPost("send")]
     public async Task<IActionResult> Send([FromBody] SendDTO DTO) {
-        Console.WriteLine(User.FindFirst(f => f.Type == JwtHelper._userId)?.Value);
-        var result = await _services.SendAsync(DTO);
+        var result = await _services.SendAsync(DTO, User.FindFirst(f => f.Type == JwtHelper._userId)!.Value);
         return StatusCode(result.Status, result);
     }
 }

@@ -30,8 +30,9 @@ public class UserServices {
     public async Task<StatusModel> F_LoginAsync(LoginDTO DTO) {
 
         var user = await _userManager.FindByNameAsync(DTO.Username);
-        if(user == null) 
+        if(user == null) {
             return new LoginResult.LoginFail(LoginResult.InvalidUsername);
+        }
 
         var locked = await _userManager.IsLockedOutAsync(user);
         if(locked) 
