@@ -7,4 +7,4 @@ public class SendDTO {
     
     [JsonPropertyName("receivers")]
     public List<string> Receivers { get; set; } = new List<string>();
-}
+    }

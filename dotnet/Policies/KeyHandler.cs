@@ -1,4 +1,3 @@
-using dotenv.net;
 using Microsoft.AspNetCore.Authorization;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -16,9 +15,7 @@ public class KeyHandler : AuthorizationHandler<KeyRequirement> {
 
     public KeyHandler(Mongo mongo, Redis redis) {
 
-        DotEnv.Load();
-
-        _duration = int.TryParse(Environment.GetEnvironmentVariable("CACHE_DURATION"), out var Parsed) ? Parsed : 60;
+        _duration = int.TryParse(DotEnvHelper.CacheDuration, out var Parsed) ? Parsed : 60;
         _mongo = mongo;
         _redis = redis;
     }

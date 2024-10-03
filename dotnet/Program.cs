@@ -28,7 +28,7 @@ builder.Services.AddSingleton<Mongo>();
 builder.Services.AddSingleton<Redis>();
 builder.Services.AddSingleton<IAuthorizationHandler, KeyHandler>();
 builder.Services.AddTransient<UserServices>();
-builder.Services.AddTransient<MessageServices>();
+builder.Services.AddSingleton<MessageServices>();
 
 
 builder.Services.AddCors(option => {
