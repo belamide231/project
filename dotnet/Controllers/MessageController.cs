@@ -14,7 +14,16 @@ public class MessageController : ControllerBase {
     [Authorize(policy: KeyRequirement._policy)]
     [HttpPost("send")]
     public async Task<IActionResult> Send([FromBody] SendDTO DTO) {
-        var result = await _services.SendAsync(DTO, User.FindFirst(f => f.Type == JwtHelper._userId)!.Value);
+        var result = await _services.F_SendAsync(DTO, User.FindFirst(f => f.Type == JwtHelper._userId)!.Value);
         return StatusCode(result.Status, result);
     }
+
+
+    [Authorize]
+    [Authorize(policy: KeyRequirement._policy)]
+    [HttpPost("receive")]
+    public async Task<ActionResult> Receive([FromBody] ReceiveDTO DTO) {
+        var result = await _services.F_ReceiveAsync(DTO, User.FindFirst(f => f.Type == JwtHelper._userId)!.Value);
+        return StatusCode(result.Status, result);
+    } 
 }

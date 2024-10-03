@@ -1,10 +1,9 @@
-using System.Collections.Concurrent;
 using System.Net.WebSockets;
 using System.Text;
 
 public class NotifierWebsocket {
 
-    public static async Task F_MessageNotifier(string conversationId, List<string> userIds) {
+    public static async Task F_MessageNotifier(string conversationId, string sender, List<string> userIds) {
 
         foreach(var userId in userIds) {
 
@@ -12,7 +11,7 @@ public class NotifierWebsocket {
             if(websockets != null) {
 
                 foreach(var websocket in websockets) 
-                    await websocket.Value.SendAsync(Encoding.UTF8.GetBytes(conversationId), WebSocketMessageType.Text, true, CancellationToken.None);
+                    await websocket.Value.SendAsync(Encoding.UTF8.GetBytes(conversationId + "-" + sender), WebSocketMessageType.Text, true, CancellationToken.None);
             }
         }
     }

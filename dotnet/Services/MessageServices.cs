@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 public class MessageServices {
@@ -14,7 +15,7 @@ public class MessageServices {
     }
 
 
-    public async Task<StatusModel> SendAsync(SendDTO DTO, string userId) {
+    public async Task<StatusModel> F_SendAsync(SendDTO DTO, string userId) {
 
 
         var userIds = new List<string>(DTO.Receivers);
@@ -33,18 +34,17 @@ public class MessageServices {
         }
 
 
-        var newCancellationTokenSource = new CancellationTokenSource();
-        _cancellationTokenSources.AddOrUpdate(conversation.Id.ToString(), newCancellationTokenSource, (_, _) => newCancellationTokenSource);
+        cancellationTokenSource = new CancellationTokenSource();
+        _cancellationTokenSources.AddOrUpdate(conversation.Id.ToString(), cancellationTokenSource, (_, _) => cancellationTokenSource);
 
-
+        
         await _redis.F_Conversations().ListRightPushAsync(conversation.Id.ToString(), Newtonsoft.Json.JsonConvert.SerializeObject(new MessageSchema(DTO.Receivers, userId, DTO.Message)));
-        await NotifierWebsocket.F_MessageNotifier(conversation.Id.ToString(), DTO.Receivers);
+        await NotifierWebsocket.F_MessageNotifier(conversation.Id.ToString(), userId, DTO.Receivers);
 
 
         _ = Task.Run(async() => {
 
-
-            await Task.Delay(TimeSpan.FromMinutes(int.TryParse(DotEnvHelper.CacheDuration, out var duration) ? duration : 60), newCancellationTokenSource.Token);
+            await Task.Delay(TimeSpan.FromMinutes(int.TryParse(DotEnvHelper.ConversationMigrationDuration, out var duration) ? duration : 60), cancellationTokenSource.Token);
 
             await _mongo.F_ConversationsCollection().FindOneAndUpdateAsync(
                 f => f.Id == conversation.Id,
@@ -54,6 +54,17 @@ public class MessageServices {
             );
             await _redis.F_Conversations().KeyDeleteAsync(conversation.Id.ToString());
         });
+
+
+        return new StatusModel(200);
+    }
+
+
+    public async Task<StatusModel> F_ReceiveAsync(ReceiveDTO DTO, string userId) {
+
+
+        // LOGIC HERE
+
 
         return new StatusModel(200);
     }

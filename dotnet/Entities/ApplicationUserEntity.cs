@@ -1,6 +1,4 @@
-using MongoDB.Bson;
-
-public class ApplicationUserModel {
+public class ApplicationUserEntity {
     public string? UserName { get; set; }
     public string? NormalizedUserName { get; set; }
     public string? Email { get; set; }

@@ -67,7 +67,7 @@ public class KeyHandler : AuthorizationHandler<KeyRequirement> {
 
         await _redis.F_UserInfo().StringSetAsync(userId, JsonConvert.SerializeObject(await _mongo.F_UsersCollection()
             .Find(f => f.Id == new ObjectId(userId))
-            .Project<ApplicationUserModel>(
+            .Project<ApplicationUserEntity>(
                 Builders<ApplicationUsers>.Projection
                     .Exclude(f => f.Id)
                     .Exclude(f => f.LockoutEnd)

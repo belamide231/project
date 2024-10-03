@@ -7,6 +7,7 @@ public class DotEnvHelper {
     public static string? RedisDbUrl;
     public static string? JwtKey;
     public static string? CacheDuration;
+    public static string? ConversationMigrationDuration;
 
     public DotEnvHelper() {
 
@@ -17,5 +18,6 @@ public class DotEnvHelper {
         RedisDbUrl = Environment.GetEnvironmentVariable("REDIS");
         JwtKey = Environment.GetEnvironmentVariable("JWT_KEY");
         CacheDuration = Environment.GetEnvironmentVariable("CACHE_DURATION");
+        ConversationMigrationDuration = Environment.GetEnvironmentVariable("CONVERSATION_MIGRATION_DURATION");
     }
 }

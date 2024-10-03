@@ -18,12 +18,16 @@ public class MessageSchema {
     [BsonElement("Status")]
     public string Status { get; set; }
 
+    [BsonElement("SeenBy")]
+    public List<string> SeenBy { get; set; }
+
     public MessageSchema(List<string> receivers, string sender, string message) {
         Receivers = receivers;
         Sender = sender;
         Created = DateTime.UtcNow;
         Message = message;
         Status = "Sent";
+        SeenBy = new List<string>();
     }
 }
 
@@ -33,6 +37,7 @@ public class ConversationSchema {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
     public ObjectId Id { get; set; }
+    
     [BsonElement("Messages")]
     public List<MessageSchema> Messages { get; set; } = new List<MessageSchema>();
     
