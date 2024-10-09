@@ -1,28 +1,175 @@
+$text-color: #B4B4B4
+$primary-color: #212121
+$secondary-color: #171717
+  
+
 div
   height: 100vh
   width: 100%
   display: flex
-  align-items: center
-  justify-content: center
+  align-items: flex-start
+  justify-content: start
+  background-color: $primary-color
 
   form.login
-    height: 300px
-    width: 400px
-    background-color: gray
+    height: 500px
+    max-width: 600px
+    min-width: 200px
+    margin: 170px 100px 0 100px
+    width: 100%
     display: flex
     flex-direction: column
     align-items: center
     justify-content: center
+    background-color: $secondary-color
+    border-radius: 20px
+    -webkit-user-select: none
+    -moz-user-select: none
+    -ms-user-select: none
+    transition: all .15s ease
+
+    h1.description
+      font-size: 40px
+      font-family: Verdana, Geneva, Tahoma, sans-serif
+      font-weight: 100
+      color: $text-color
+      transition: all .15s ease
+
+    @media (max-width: 675px)
+      h1.description
+        font-size: 27px
+        margin-bottom: 50px
 
     section.username
-      height: 40px
-      width: 400px
-      background-color: white
-
-      input
-
-    section.password
       margin-top: 10px
       height: 40px
-      width: 400px
+      width: 80%
       background-color: white
+      display: flex
+      align-items: center
+      justify-content: flex-start
+      background-color: $primary-color
+      border-radius: 5px
+      position: relative
+      text-indent: 20px
+      -webkit-user-select: none
+      -moz-user-select: none
+      -ms-user-select: none
+
+      input.username
+        height: 100%
+        width: 100%
+        font-family: sans-serif
+        font-size: 17px
+        color: $text-color
+        background-color: transparent
+        outline: none
+        border: none
+        position: absolute
+        text-indent: 15px
+  
+      label.username
+        border-radius: 5px 5px 0 0
+        width: 100%
+        padding-top: 5px
+        position: absolute
+        color: $text-color
+        font-family: sans-serif
+        font-size: 17px
+        transition: .15s ease
+        cursor: text
+        user-select: none
+
+      input.username:focus ~ label.username,
+      input.username:not(:placeholder-shown) ~ label.username
+        margin-bottom: 45px
+        font-size: 15px
+
+    section.password
+      margin-top: 12px
+      height: 40px
+      width: 80%
+      background-color: white
+      background-color: $primary-color
+      display: flex
+      align-items: center
+      justify-content: flex-start
+      position: relative
+      border-radius: 5px
+      user-select: none
+      -webkit-user-select: none
+      -moz-user-select: none
+      -ms-user-select: none
+
+      input.password
+        height: 100%
+        width: 100%
+        font-family: sans-serif
+        font-size: 17px
+        color: $text-color
+        background-color: transparent
+        outline: none
+        border: none
+        border-radius: 5px
+        position: absolute
+        text-indent: 15px
+
+
+      label.password
+        border-radius: 5px 5px 0 0
+        width: 100%
+        padding-top: 5px
+        position: absolute
+        color: $text-color
+        font-family: sans-serif
+        font-size: 17px
+        transition: .15s ease
+        cursor: text
+        text-indent: 20px
+        user-select: none
+
+      input.password:focus ~ label.password,
+      input.password:not(:placeholder-shown) ~ label.password
+        margin-bottom: 45px
+        font-size: 15px
+
+    section.checkbox
+      margin: 15px
+      height: 40px
+      width: 75%
+      display: flex
+      align-items: center
+      justify-content: start
+      color: $text-color
+
+      input.checkbox
+        margin: 20px
+        accent-color: red
+
+      span
+        font-size: 17px
+        font-family: sans-serif
+
+    input.submit
+      height: 40px
+      width: 80%
+      outline: none
+      border: none
+      background-color: $primary-color
+      color: $text-color
+      font-family: sans-serif
+      font-size: 17px
+      cursor: pointer
+      border-radius: 5px
+
+    span.sign-up
+      margin-top: 30px
+      font-size: 17px
+      color: $text-color
+      font-family: sans-serif
+      text-decoration: underline
+      cursor: pointer
+
+  @media (max-width: 800px)
+    form.login
+      margin: 170px 50px 0 50px

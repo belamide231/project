@@ -1,13 +1,19 @@
 <div>
   <form class="login">
+    <h1 class="description">LOGIN YOUR ACCOUNT</h1>
     <section class="username">
-      <input type="text">
-      <label for=""></label>
+      <input class="username" id="username" type="text" autocomplete="off" autocapitalize="off" placeholder="">
+      <label class="username" for="username">Username</label>
     </section>
     <section class="password">
-      <input type="password">
-      <label for=""></label>
+      <input class="password" id="password" type="password" autocomplete="off" autocapitalize="off" placeholder="">
+      <label class="password" for="password">Password</label>
     </section>
-    <input type="submit" value="Login">
+    <section class="checkbox">
+      <input type="checkbox">
+      <span class="remember">Remeber</span>
+    </section>
+    <input class="submit" type="submit" value="Login">
+    <span class="sign-up">Sign-up</span>
   </form>
 </div>
