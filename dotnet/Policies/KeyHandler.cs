@@ -24,9 +24,13 @@ public class KeyHandler : AuthorizationHandler<KeyRequirement> {
     protected async override Task HandleRequirementAsync(AuthorizationHandlerContext context, KeyRequirement requirement) {
 
 
+        // NEEDS TO BE EDITED
+
+
         var userId = context.User.FindFirst(f => f.Type == JwtHelper._userId)?.Value;
         var authId = context.User.FindFirst(f => f.Type == JwtHelper._authId)?.Value;
         var authKey = context.User.FindFirst(f => f.Type == JwtHelper._authKey)?.Value;
+        
 
 
         if(string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(authId) || string.IsNullOrEmpty(authKey)) {

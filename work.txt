@@ -1,0 +1,10 @@
+✅ FINISHED ❌ NOT FINISH 
+
+✅ register
+✅ login
+✅ websocket
+✅ authentication
+❌ 2 step verification
+❌ change password
+❌ dashboard
+❌ admin

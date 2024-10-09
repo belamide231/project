@@ -1,4 +1,3 @@
-using Microsoft.VisualBasic;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -27,7 +26,6 @@ public class UserDataSchema {
 
     [BsonElement("ConversationIds")]
     public List<ConversationIdSchema>? ConversationIds { get; set; }
-
     public UserDataSchema(string id, string conversationId) {
         Id = id;
         ConversationIds = new List<ConversationIdSchema>(new [] {
@@ -35,3 +33,5 @@ public class UserDataSchema {
         });
     }
 }
+
+
