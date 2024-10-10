@@ -5,6 +5,7 @@ import { RoutesModule } from './routes.module';
 import { FormsModule } from '@angular/forms';
 import { HomeModule } from './home/home.module';
 import { LoginModule } from './login/login.module';
+import { RegisterModule } from './register/register.module';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { LoginModule } from './login/login.module';
     RoutesModule,
     FormsModule,
     LoginModule,
-    HomeModule
+    RegisterModule,
+    HomeModule,
   ],
   bootstrap: [
     AppComponent

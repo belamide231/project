@@ -1,6 +1,13 @@
 $text-color: #B4B4B4
 $primary-color: #212121
 $secondary-color: #171717
+
+
+@keyframes fadeIn
+  from 
+    opacity: 0
+  to 
+    opacity: 1
   
 
 div
@@ -14,7 +21,6 @@ div
   form.login
     height: 500px
     max-width: 600px
-    min-width: 200px
     margin: 170px 100px 0 100px
     width: 100%
     display: flex
@@ -26,7 +32,9 @@ div
     -webkit-user-select: none
     -moz-user-select: none
     -ms-user-select: none
-    transition: all .15s ease
+    transition: all .15s ease-in
+    //outline: 1px solid $text-color
+    animation: fadeIn 1s ease forwards
 
     h1.description
       font-size: 40px
@@ -128,7 +136,7 @@ div
         text-indent: 20px
         user-select: none
 
-      input.password:focus ~ label.password,
+      input.password:focus ~ label.password,  
       input.password:not(:placeholder-shown) ~ label.password
         margin-bottom: 45px
         font-size: 15px
@@ -146,7 +154,7 @@ div
         margin: 20px
         accent-color: red
 
-      span
+      label.remember
         font-size: 17px
         font-family: sans-serif
 

@@ -1,19 +1,23 @@
 <div>
-  <form class="login">
+  <form (ngSubmit)="onSubmit()" class="login"> <!-- Call onSubmit() on form submit -->
     <h1 class="description">LOGIN YOUR ACCOUNT</h1>
+    
     <section class="username">
-      <input class="username" id="username" type="text" autocomplete="off" autocapitalize="off" placeholder="">
+      <input class="username" id="username" type="text" autocomplete="off" autocapitalize="off" placeholder="" [(ngModel)]="username" name="username">
       <label class="username" for="username">Username</label>
     </section>
+    
     <section class="password">
-      <input class="password" id="password" type="password" autocomplete="off" autocapitalize="off" placeholder="">
+      <input class="password" id="password" type="password" autocomplete="off" autocapitalize="off" placeholder="" [(ngModel)]="password" name="password">
       <label class="password" for="password">Password</label>
     </section>
+    
     <section class="checkbox">
-      <input type="checkbox">
-      <span class="remember">Remeber</span>
+      <input type="checkbox" id="remember" [(ngModel)]="remember" name="remember">
+      <label for="remember" class="remember">Remember</label>
     </section>
+    
     <input class="submit" type="submit" value="Login">
-    <span class="sign-up">Sign-up</span>
+    <span class="sign-up" (click)="redirectToRegister()">Sign-up</span>
   </form>
 </div>
