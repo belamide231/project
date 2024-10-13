@@ -28,13 +28,12 @@ div
     align-items: center
     justify-content: center
     background-color: $secondary-color
-    border-radius: 20px
-    -webkit-user-select: none
-    -moz-user-select: none
-    -ms-user-select: none
+    border-radius: 15px
     transition: all .15s ease-in
-    //outline: 1px solid $text-color
     animation: fadeIn 1s ease forwards
+    -moz-user-select: none
+    -ms-touch-select: none
+    -webkit-user-select: none
 
     h1.description
       font-size: 40px
@@ -43,13 +42,19 @@ div
       color: $text-color
       transition: all .15s ease
 
+    span.conflict
+      font-size: 25px
+      font-family: sans-serif
+      font-weight: 100
+      color: $text-color
+      margin: 10px 0 10px 0
+
     @media (max-width: 675px)
       h1.description
         font-size: 27px
-        margin-bottom: 50px
 
     section.username
-      margin-top: 10px
+      margin-top: 25px
       height: 40px
       width: 80%
       background-color: white
@@ -60,9 +65,6 @@ div
       border-radius: 5px
       position: relative
       text-indent: 20px
-      -webkit-user-select: none
-      -moz-user-select: none
-      -ms-user-select: none
 
       input.username
         height: 100%
@@ -105,9 +107,6 @@ div
       position: relative
       border-radius: 5px
       user-select: none
-      -webkit-user-select: none
-      -moz-user-select: none
-      -ms-user-select: none
 
       input.password
         height: 100%
@@ -152,11 +151,13 @@ div
 
       input.checkbox
         margin: 20px
-        accent-color: red
+        accent-color: $primary-color
+        cursor: pointer
 
       label.remember
         font-size: 17px
         font-family: sans-serif
+        cursor: pointer
 
     input.submit
       height: 40px

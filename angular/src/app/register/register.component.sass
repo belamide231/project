@@ -2,14 +2,219 @@ $text-color: #B4B4B4
 $primary-color: #212121
 $secondary-color: #171717
 
-
 @keyframes fadeIn
   from 
     opacity: 0
   to 
     opacity: 1
-    
 
+@mixin sectionStyles($margintop)
+  margin-top: $margintop
+  height: 40px
+  width: 80%
+  background-color: $primary-color
+  position: relative
+  display: flex
+  align-items: center
+  border-radius: 5px
+
+  input.input
+    height: 100%
+    width: 100%
+    background-color: transparent
+    position: absolute
+    border: none
+    outline: none
+    text-indent: 15px
+    font-family: sans-serif
+    color: $text-color
+    font-size: 17px
+
+  label.input
+    color: $text-color
+    position: absolute
+    font-size: 17px
+    font-family: sans-serif
+    text-indent: 20px
+    transition: all .15s ease
+
+  input.input:focus ~ label.input,
+  input.input:not(:placeholder-shown) ~ label.input
+    margin-bottom: 45px
+    font-size: 15px
+
+  section.icon
+    height: 100%
+    width: 100%
+    position: relative
+    display: flex
+    align-items: center
+    justify-content: end
+    background-color: transparent
+    -ms-user-select: none
+    -moz-user-select: none
+    -webkit-user-select: none
+    pointer-events: none
+
+    svg.icon
+      height: 60%
+      margin-right: 15px
+      pointer-events: auto
+      cursor: pointer
+
+
+@mixin formStyles($height) 
+  height: $height
+  max-width: 600px
+  width: 100%
+  background-color: $secondary-color
+  display: flex
+  flex-direction: column  
+  align-items: center
+  justify-content: center
+  border-radius: 15px
+  margin: 0 100px 170px 100px
+  transition: all .15s ease
+  animation: fadeIn 1s ease-in forwards
+  -moz-user-select: none
+  -ms-touch-select: none
+  -webkit-user-select: none
+
+  h1.description
+    color: $text-color
+    font-family: Verdana, Geneva, Tahoma, sans-serif
+    font-weight: 100
+    font-size: 43px
+    transition: all .15s ease
+
+  @media (max-width: 700px)
+    h1.description
+      font-size: 27px
+
+section.email
+  @include sectionStyles(25px)
+
+section.password
+  @include sectionStyles(10px)
+
+section.message1
+  width: 70%
+  margin: 20px 0 0 0
+  display: flex
+  align-items: center
+  justify-content: center
+
+  span.message
+    font-size: 17px
+    color: $text-color
+    font-family: sans-serif
+
+section.message2
+  width: 70%
+  margin: 20px 0 10px 0
+  display: flex
+  align-items: center
+  justify-content: center
+
+  span.message
+    font-size: 17px
+    color: $text-color
+    font-family: sans-serif
+
+section.parentCode
+  width: 80%
+  height: 40px
+  margin-top: 10px
+  display: flex
+  justify-content: start
+  align-items: center
+
+  section.code
+    width: 30%
+    height: 100%
+    background-color: $primary-color
+    position: relative
+    display: flex
+    align-items: center
+    justify-content: start
+    flex-direction: star
+
+    input.code
+      height: 100%
+      width: 100%
+      position: absolute
+      outline: none
+      border: none
+      background-color: transparent
+      font-size: 17px
+      color: $text-color
+      text-indent: 15px
+
+    label.code
+      position: absolute
+      font-size: 17px
+      font-family: sans-serif
+      color: $text-color
+      text-indent: 20px
+      transition: all .15s ease
+      
+    input.code:focus ~ label.code,
+    input.code:not(:placeholder-shown) ~ label.code
+      font-size: 15px
+      margin-bottom: 40px
+
+span.context
+  margin-top: 20px
+  font-family: Verdana, Geneva, Tahoma, sans-serif
+  font-size: 25px
+  color: $text-color
+
+section.checkbox
+  width: 70%
+  height: 40px
+  display: flex
+  align-items: center
+  justify-content: start
+  margin: 10px 0 10px 0 
+
+  input.checkbox
+    margin-right: 20px
+    accent-color: $primary-color
+    cursor: pointer
+
+  label.checkbox
+    font-family: sans-serif
+    color: $text-color
+    font-size: 17px
+    cursor: pointer
+
+svg.loading
+  height: 40px
+  background-color: transparent
+
+input.submit
+  height: 40px
+  width: 80%
+  background-color: $primary-color
+  color: $text-color
+  outline: none
+  border: none
+  font-size: 17px
+  font-family: sans-serif
+  border-radius: 5px
+  cursor: pointer
+
+span.login
+  font-family: sans-serif
+  font-size: 17px
+  color: $text-color
+  margin-top: 30px
+  cursor: pointer
+  text-decoration: underline
+
+@media (max-width: 800px)
+  form.register
+    margin: 0 50px 170px 50px
 
 div.register
   height: 100vh
@@ -18,129 +223,14 @@ div.register
   align-items: center
   justify-content: start
 
-  form.register
-    height: 400px
-    max-width: 600px
-    width: 100%
-    background-color: $secondary-color
-    display: flex
-    flex-direction: column  
-    align-items: center
-    justify-content: center
-    border-radius: 10px
-    margin: 0 50px 0 50px
-    transition: all .15s ease
-    animation: fadeIn 1s ease-in forwards
+  form.phase1
+    @include formStyles(450px)
 
-    h1.description
-      color: $text-color
-      font-family: Verdana, Geneva, Tahoma, sans-serif
-      font-weight: 100
-      font-size: 43px
-      transition: all .15s ease
-      -moz-user-select: none
-      -ms-touch-select: none
-      -webkit-user-select: none
+  form.phase2
+    @include formStyles(500px)
 
-    @media (max-width: 700px)
-      h1.description
-        font-size: 27px
+  form.phase3
+    @include formStyles(550px)
 
-    section.email
-      margin-top: 25px
-      height: 40px
-      width: 80%
-      background-color: $primary-color
-      position: relative
-      display: flex
-      align-items: center
-      border-radius: 5px
-
-      input.email
-        height: 100%
-        width: 100%
-        background-color: transparent
-        position: absolute
-        border: none
-        outline: none
-        text-indent: 15px
-        font-family: sans-serif
-        color: $text-color
-        font-size: 17px
-
-      label.email
-        color: $text-color
-        position: absolute
-        font-size: 17px
-        font-family: sans-serif
-        text-indent: 20px
-        transition: all .15s ease
-        -moz-user-select: none
-        -ms-touch-select: none
-        -webkit-user-select: none
-
-      input.email:focus ~ label.email,
-      input.email:not(:placeholder-shown) ~ label.email
-        margin-bottom: 45px
-        font-size: 15px
-
-    section.checkbox
-      width: 75%
-      height: 40px
-      display: flex
-      align-items: center
-      justify-content: start
-
-      input.checkbox
-        margin-right: 10px
-
-      span.checkbox
-        font-family: sans-serif
-        color: $text-color
-        font-size: 17px
-        -moz-user-select: none
-        -ms-touch-select: none
-        -webkit-user-select: none
-
-    input.submit
-      height: 40px
-      width: 80%
-      background-color: $primary-color
-      color: $text-color
-      outline: none
-      border: none
-      font-size: 17px
-      font-family: sans-serif
-      border-radius: 5px
-      cursor: pointer
-
-    span.login
-      font-family: sans-serif
-      font-size: 17px
-      color: $text-color
-      margin-top: 30px
-      cursor: pointer
-      text-decoration: underline
-      -moz-user-select: none
-      -ms-touch-select: none
-      -webkit-user-select: none
-
-  @media (min-width: 800px)
-    form.register
-      margin: 0 100px 0 100px
-  
-  div.background
-    margin-top: 200px
-    position: absolute
-    height: 100%
-    width: 100%
-    z-index: -1
-    display: flex
-    //align-items: center
-    justify-content: center
-
-    svg.background
-      height: 100%
-      width: 100%
-
-
+  form.phase4
+    @include formStyles(400px)

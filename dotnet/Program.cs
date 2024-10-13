@@ -6,6 +6,7 @@
 // dotnet add package StackExchange.Redis
 // dotnet add package Newtonsoft.Json
 // dotnet add package dotenv.net
+// dotnet add package MailKit
 
 
 using System.Text;
@@ -13,11 +14,13 @@ using AspNetCore.Identity.Mongo;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson;
 
 
 new DotEnvHelper();
+new MailKitHelper();
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -74,7 +77,10 @@ if (!app.Environment.IsDevelopment()) {
 
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions {
+    FileProvider = new PhysicalFileProvider(HomeController._directory),
+    RequestPath = ""
+});
 app.UseCors("*");
 app.UseRouting();
 app.UseAuthentication();
@@ -82,8 +88,8 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
 app.UseWebSockets();
-app.UseMiddleware<WebsocketAuthorization>();
-app.UseMiddleware<Websocket>();
+// app.UseMiddleware<WebsocketAuthorization>();
+// app.UseMiddleware<Websocket>();
 
 
 app.Run();

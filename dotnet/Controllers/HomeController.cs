@@ -1,13 +1,23 @@
-using System.Drawing;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
 public class HomeController : Controller {
 
 
-    [Authorize]
-    [Authorize(policy: KeyRequirement._policy)]
-    [HttpGet("/")]
-    public IActionResult Home() => Content("YOU ARE AUTHORIZED");
+    public static string _directory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/browser");
+
+
+    [HttpGet("{*path}")]
+    public IActionResult Render(string path) {
+
+        string fullPath = Path.Combine(_directory, path);
+
+        if (System.IO.File.Exists(fullPath)) {
+
+            return PhysicalFile(fullPath, "text/html");
+        }
+
+        return PhysicalFile(Path.Combine(_directory, "index.html"), "text/html");
+    }
+
 }

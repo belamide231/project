@@ -39,11 +39,13 @@ public class LoginResult {
     public class LoginSuccess : StatusModel {
         public bool Login { get; set; }
         public string TokenType { get; set; }
-        public string AccessToken { get; set; }
-        public LoginSuccess(string token) : base(StatusCodes.Status200OK) {
+        public string Token { get; set; }
+        public string DeviceId { get; set; }
+        public LoginSuccess(string token, string deviceId) : base(StatusCodes.Status200OK) {
             Login = true;
             TokenType = "Bearer";
-            AccessToken = token;
+            Token = token;
+            DeviceId = deviceId;
         } 
     }
 }

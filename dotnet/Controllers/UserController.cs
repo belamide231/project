@@ -1,9 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
 
-// TEMPORARY ONLY FOR TESTING API
-
-
 [Route("api/[controller]")]
 [ApiController]
 public class UserController : ControllerBase {
@@ -11,6 +8,15 @@ public class UserController : ControllerBase {
 
     private readonly UserServices _services;
     public UserController(UserServices services) => _services = services;
+
+
+    // NEEDS AN IMPROVEMENT
+    [HttpPost("verify")]
+    public async Task<IActionResult> VerifyAsync([FromBody] VerifyDTO DTO) {
+
+        var result = await _services.F_VerifyAsync(DTO);
+        return StatusCode(result.Status, result);
+    }
 
 
     [HttpPost("register")]

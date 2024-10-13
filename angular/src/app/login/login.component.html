@@ -1,22 +1,19 @@
 <div>
-  <form (ngSubmit)="onSubmit()" class="login"> <!-- Call onSubmit() on form submit -->
+  <form (ngSubmit)="onSubmit()" class="login">
     <h1 class="description">LOGIN YOUR ACCOUNT</h1>
-    
+    <span class="conflict" *ngIf="_conflict !== _blank">{{_conflict}}</span>
     <section class="username">
-      <input class="username" id="username" type="text" autocomplete="off" autocapitalize="off" placeholder="" [(ngModel)]="username" name="username">
+      <input class="username" id="username" type="text" autocomplete="off" autocapitalize="off" placeholder="" [(ngModel)]="_email" name="username">
       <label class="username" for="username">Username</label>
     </section>
-    
     <section class="password">
-      <input class="password" id="password" type="password" autocomplete="off" autocapitalize="off" placeholder="" [(ngModel)]="password" name="password">
+      <input class="password" id="password" type="password" autocomplete="off" autocapitalize="off" placeholder="" [(ngModel)]="_password" name="password">
       <label class="password" for="password">Password</label>
     </section>
-    
     <section class="checkbox">
-      <input type="checkbox" id="remember" [(ngModel)]="remember" name="remember">
-      <label for="remember" class="remember">Remember</label>
+      <input class="checkbox" (click)="trustSwitch()" [(ngModel)]="_trust" type="checkbox" id="remember" name="remember">
+      <label for="remember" class="remember">Trust Device</label>
     </section>
-    
     <input class="submit" type="submit" value="Login">
     <span class="sign-up" (click)="redirectToRegister()">Sign-up</span>
   </form>
