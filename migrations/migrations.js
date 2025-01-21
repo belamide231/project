@@ -36,8 +36,16 @@ const startMigrations = async () => {
         const tables = fs.readFileSync(path.join(__dirname, 'tables.sql'), 'utf-8').split(';');
         await recursion(connectionInstance, tables);
 
-        const procedures = fs.readFileSync(path.join(__dirname, 'procedures.sql'), 'utf-8').split(';;');
-        await recursion(connectionInstance, procedures);
+        const messageProcedure = fs.readFileSync(path.join(__dirname, './procedures/message.sql'), 'utf-8').split(';;');
+        await recursion(connectionInstance, messageProcedure);
+
+        const ticketProcedure = fs.readFileSync(path.join(__dirname, './procedures/ticket.sql'), 'utf-8').split(';;');
+        await recursion(connectionInstance, ticketProcedure);
+
+        const accountProcedure = fs.readFileSync(path.join(__dirname, './procedures/profile.sql'), 'utf-8').split(';;');
+        await recursion(connectionInstance, accountProcedure);
+
+
 
         const initials = fs.readFileSync(path.join(__dirname, 'calls.sql'), 'utf-8').split(';')
         await recursion(connectionInstance, initials);
