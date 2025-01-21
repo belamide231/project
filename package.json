@@ -4,11 +4,11 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "dev": "clear && nodemon ./src/app.ts",
+    "dev": "nodemon ./src/app.ts",
     "serve": "node ./src/app.ts",
-    "migrations": "node ./migrations/migrations.js",
-    "database-drop": "node ./migrations/drop.js",
-    "migrations-restart": "npm run database-drop && npm run migrations"
+    "migrations-up": "node ./migrations/migrations.js",
+    "migrations-down": "node ./migrations/drop.js",
+    "migrations-restart": "npm run migrations-down && npm run migrations-up"
   },
   "keywords": [],
   "author": "",

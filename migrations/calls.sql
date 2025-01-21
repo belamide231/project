@@ -18,31 +18,31 @@ CALL insert_message(DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 80 SECOND), 1, 0, "16 C
 CALL insert_message(DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 85 SECOND), 1, 0, "17 C#", "helsi", "helsi");
 CALL insert_message(DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 90 SECOND), 1, 0, "18 Java", "helsi", "helsi");
 
-CALL get_message("helsi", 1);
-GETTING CONVERSATIONS HEAD
-SELECT "CHAT HOME" AS _;
-CALL get_conversations_heads("helsi");
+-- CALL get_message("helsi", 1);
+-- GETTING CONVERSATIONS HEAD
+-- SELECT "CHAT HOME" AS _;
+-- CALL get_conversations_heads("helsi");
 
--- GETTING CONVERSATION
-SELECT "helsi & timoy" AS _;
-CALL get_conversation("helsi", "timoy");
+-- -- GETTING CONVERSATION
+-- SELECT "helsi & timoy" AS _;
+-- CALL get_conversation("helsi", "timoy");
 
--- RELOCATING CONVERSATION TO LOGS
-SELECT "relocating conversation to logs" AS _;
-CALL relocate_conversation("timoy", "helsi");
+-- -- RELOCATING CONVERSATION TO LOGS
+-- SELECT "relocating conversation to logs" AS _;
+-- CALL relocate_conversation("timoy", "helsi");
 
--- GETTING LOGS TO SPECIFIC CONVERSATION
-SELECT "conversation logs" AS _;
-CALL get_conversation_logs(1);
+-- -- GETTING LOGS TO SPECIFIC CONVERSATION
+-- SELECT "conversation logs" AS _;
+-- CALL get_conversation_logs(1);
 
--- GETTING ALL CONVERSATIONS HEAD LOGS
-SELECT "conversation heads" AS _;
-CALL get_conversations_heads_logs();
+-- -- GETTING ALL CONVERSATIONS HEAD LOGS
+-- SELECT "conversation heads" AS _;
+-- CALL get_conversations_heads_logs();
 
-SELECT * FROM tbl_users;
-SELECT * FROM tbl_messages;
-SELECT * FROM tbl_messages_head;
-SELECT * FROM tbl_messages_head_logs;
-SELECT * FROM tbl_messages_logs;
+-- SELECT * FROM tbl_users;
+-- SELECT * FROM tbl_messages;
+-- SELECT * FROM tbl_messages_head;
+-- SELECT * FROM tbl_messages_head_logs;
+-- SELECT * FROM tbl_messages_logs;
 
-SHOW PROCEDURE STATUS WHERE DB = DATABASE();
+-- SHOW PROCEDURE STATUS WHERE DB = DATABASE();
