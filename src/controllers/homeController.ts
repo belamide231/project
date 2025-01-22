@@ -2,6 +2,7 @@ import { Router } from "express";
 import { isAuthenticated } from "../middlewares/authentication";
 import { isAuthorized } from "../middlewares/authorization";
 import path from 'path';
+import { verifyToken } from "../utilities/jwt";
 
 const homeController = Router();
 
@@ -16,12 +17,30 @@ const homeController = Router();
 */
 
 homeController.get('/login', (req, res) => {
+
+    const payload = verifyToken(req.cookies.token);
+
+    if(payload.token) {
+
+        if(JSON.parse(JSON.stringify(payload.payload)).role === 'admin') {
+
+            return res.redirect('/');
+        }
+    }
+
+    res.cookie('token', '', {
+        httpOnly: true,
+        secure: false,
+        path: '/',
+        expires: new Date(0)
+    });
+
     res.status(200).sendFile(path.join(__dirname, '../../public/browser/index.html'));
 });
 
-//homeController.get('/', (req, res) => {
-
-//})
+homeController.get('/', isAuthorized, (req, res) => {
+    res.status(200).sendFile(path.join(__dirname, '../../public/browser/index.html'));
+});
 
 //homeController.get('/chat', isAuthenticated, isAuthorized, (req, res) => {
 //    res.redirect('chat');

@@ -4,7 +4,7 @@ import passport from 'passport';
 const authController = Router();
 
 import '../auth/google';
-import '../global/d';
+import '../interfaces/session';
 import '../model/sessionPassport';
 import { isAuthenticated } from '../middlewares/authentication';
 import { isAuthorized } from '../middlewares/authorization';

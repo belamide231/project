@@ -3,35 +3,50 @@ import { loginAccountDTO } from "../dto/accountController/loginAccount";
 import { tokenizer } from '../utilities/jwt';
 import { createAccountDTO } from "../dto/accountController/createAccount";
 import { createAccountService } from "../services/accountServices";
-import cookieParser from "cookie-parser";
-import cors from 'cors';
 
 
 const accountController = Router();
-accountController.use(cookieParser());
-accountController.use(json());
-accountController.use(cors({ origin: 'http://localhost:4200', credentials: true }));
+const credentials = ['ibcadmin', 'gisadmin', 'jetadmin'];
+const users: any = {
+    ibcadmin: 'IBC admin',
+    gisadmin: 'Gis admin',
+    jetadmin: 'Jet admin'
+};
 
 accountController.post('/addAccountManager', (req: Request, res: Response) => {
     res.sendStatus(200);
 });
 
 accountController.post('/loginAccount', (req: Request, res: Response) => {
-
     const account = req.body as loginAccountDTO;
 
-    if(account.username === 'ibcadmin' && account.password === 'ibcadmin') {
+    if (credentials.includes(account.username) && credentials.includes(account.password) && account.username === account.password) {
 
-        res.cookie('token', tokenizer(0, 'admin'));
-        res.sendStatus(200);
-        return;
+        res.cookie('token', tokenizer(users[account.username], 'admin'), {
+            httpOnly: true,
+            secure: false,
+            path: '/'
+        });
+
+        res.status(200).json({ message: 'Login successful' });
+
     } else {
 
-
-        res.sendStatus(403);
-        return;
+        res.status(403).json({ message: 'Invalid credentials' });
     }
+});
 
+accountController.post('/logoutAccount', (req: Request, res: Response) => {
+
+    res.cookie('token', '', {
+        httpOnly: true, 
+        secure: false,
+        path: '/', 
+        expires: new Date(0)
+    });
+
+    res.status(200).json({ message: 'Cookie cleared, logged out successfully' });
+    
 });
 
 accountController.post('/createAccount', async (req: Request, res: Response) => {

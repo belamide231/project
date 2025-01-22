@@ -17,7 +17,6 @@ import getMysqlConnection from './configuration/mysql';
 import getRedisConnection from './configuration/redis';
 import { connection } from './sockets/connection';
 import './auth/google';
-import { tokenizer } from './utilities/jwt';
 
 export const mysql = getMysqlConnection();
 export const redis = getRedisConnection();
@@ -30,17 +29,24 @@ export const io = new Server(server);
 
 app.use(cookieParser());
 app.use(json());
-app.use(urlencoded({ extended: true }));
+app.use(urlencoded({ 
+    extended: true 
+}));
 app.use(cors({
-    origin: ['http://localhost:4200', 'http://localhost:3000'],
+    origin: '*',
     credentials: true
 }));
-app.use(session({ secret: 'cats', resave: false, saveUninitialized: true, cookie: { secure: false } }));
+app.use(session({ 
+    secret: 'cats', 
+    resave: false, 
+    saveUninitialized: true, 
+    cookie: { secure: false } 
+}));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(express.static(path.join(__dirname, '../public/browser')));
 app.use(controller);
+app.use(express.static(path.join(__dirname, '../public/browser')));
 
-io.on('connection', connection); 
+io.on('connection', connection);
 
 server.listen(port, () => console.log(`http://localhost:${port}`));

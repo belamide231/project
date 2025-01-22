@@ -1,17 +1,46 @@
 import { Request, Response, NextFunction } from "express";
-
-const allowedEmails = ["belamidemills29@gmail.com"];
+import { verifyToken } from "../utilities/jwt";
+import 'express-session';
 
 export const isAuthorized = (req: Request, res: Response, next: NextFunction) => {
 
-    if(allowedEmails.includes(JSON.parse(JSON.stringify(req.session)).passport.user.emails[0].value)) {
-        
-        next();
+    const payload = verifyToken(req.cookies.token);
+
+    if(!payload.token) {
+
+        res.cookie('token', '', {
+            httpOnly: true,
+            secure: false,
+            path: '/',
+            expires: new Date(0)
+        });
+
+        return res.redirect('/login');
 
     } else {
 
-        req.logOut;
-        req.session.destroy;
-        res.sendStatus(401);
+        if(JSON.parse(JSON.stringify(payload.payload)).role !== 'admin') {
+
+            res.cookie('token', '', {
+                httpOnly: true,
+                secure: false,
+                path: '/',
+                expires: new Date(0)
+            });
+
+            return res.redirect('/login');
+        }
     }
+
+    const data = JSON.parse(JSON.stringify(payload.payload));
+
+    req.session.user = {
+        user: data.user,
+        role: data.role,
+    };
+
+    console.log(req.session);
+      
+
+    next();
 }

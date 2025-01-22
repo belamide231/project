@@ -1,6 +1,7 @@
 //create a chat widget
 (function() {
   var script = document.createElement('script');
+  script.type = 'module';
   script.src = 'https://chat-75vz.vercel.app/dist/frontend/browser/main.js?nocache=' + new Date().getTime();
   script.onload = function() {
     document.addEventListener('DOMContentLoaded', function() {

@@ -1,13 +1,7 @@
 import { Request, Response, NextFunction } from "express";
+import { verifyToken } from "../utilities/jwt";
 
 export const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
-    if(req.user) {
-        
-        next();
-        
-    } else {
 
-        res.sendStatus(401);
-        return;
-    }
+    next();
 }
