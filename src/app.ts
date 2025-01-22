@@ -7,6 +7,7 @@ import dontenv from 'dotenv';
 import path from 'path';
 import http from 'http';
 import { Server } from 'socket.io';
+import cookieParser from 'cookie-parser';
 
 dontenv.config();
 
@@ -16,6 +17,7 @@ import getMysqlConnection from './configuration/mysql';
 import getRedisConnection from './configuration/redis';
 import { connection } from './sockets/connection';
 import './auth/google';
+import { tokenizer } from './utilities/jwt';
 
 export const mysql = getMysqlConnection();
 export const redis = getRedisConnection();
@@ -26,16 +28,17 @@ const server = http.createServer(app);
 export const users: Record<string, string[]> = {};
 export const io = new Server(server);
 
+app.use(cookieParser());
 app.use(json());
 app.use(urlencoded({ extended: true }));
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: ['http://localhost:4200', 'http://localhost:3000'],
     credentials: true
 }));
 app.use(session({ secret: 'cats', resave: false, saveUninitialized: true, cookie: { secure: false } }));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(express.static(path.join(__dirname, '../public/views/browser')));
+app.use(express.static(path.join(__dirname, '../public/browser')));
 app.use(controller);
 
 io.on('connection', connection); 

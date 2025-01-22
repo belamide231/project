@@ -1,26 +1,37 @@
-import { Router, Request, Response } from "express";
+import { Router, Request, Response, json } from "express";
 import { loginAccountDTO } from "../dto/accountController/loginAccount";
-import { tokenizer } from '../utils/jwt';
+import { tokenizer } from '../utilities/jwt';
 import { createAccountDTO } from "../dto/accountController/createAccount";
 import { createAccountService } from "../services/accountServices";
+import cookieParser from "cookie-parser";
+import cors from 'cors';
 
 
 const accountController = Router();
+accountController.use(cookieParser());
+accountController.use(json());
+accountController.use(cors({ origin: 'http://localhost:4200', credentials: true }));
 
 accountController.post('/addAccountManager', (req: Request, res: Response) => {
     res.sendStatus(200);
 });
 
-accountController.post('/login', (req: Request, res: Response) => {
+accountController.post('/loginAccount', (req: Request, res: Response) => {
 
     const account = req.body as loginAccountDTO;
 
     if(account.username === 'ibcadmin' && account.password === 'ibcadmin') {
 
-        res.status(200).json({ 'token': tokenizer(3, 'admin') });
+        res.cookie('token', tokenizer(0, 'admin'));
+        res.sendStatus(200);
+        return;
+    } else {
+
+
+        res.sendStatus(403);
+        return;
     }
 
-    res.sendStatus(403);
 });
 
 accountController.post('/createAccount', async (req: Request, res: Response) => {

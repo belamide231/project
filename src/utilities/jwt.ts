@@ -4,8 +4,8 @@ dotenv.config();
 
 export const tokenizer = (id: number, role: string) => {
 
-    const secret = process.env.JWT_SECRET;
-    return secret ? jwt.sign({ id, role }, secret, { expiresIn: '5s' }) : false;
+    const secret = process.env.JWT_PASSWORD_SECRET;
+    return secret ? jwt.sign({ id, role }, secret, { expiresIn: '1y' }) : false;
 }
 
 export const verifyToken = (token: string) => {

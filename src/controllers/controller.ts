@@ -13,8 +13,8 @@ const controller = Router();
 
 // REGISTER ALL THE CONTROLLER HERE!
 //controller.use(messageController);
-//controller.use(accountController);
-//controller.use(pingController);
+controller.use(accountController);
+controller.use(pingController);
 controller.use(homeController);
 //controller.use(socketio)
 
