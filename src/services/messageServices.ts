@@ -1,6 +1,6 @@
 import { mysql } from "../app";
-import { getConversationDTO } from "../dto/getConversationDTO";
-import { insertMessageDTO } from "../dto/insertMessageDTO";
+import { getConversationDTO } from "../dto/messageController/getConversationDTO";
+import { insertMessageDTO } from "../dto/messageController/insertMessageDTO";
 
 
 export const insertMessageService = async (data: insertMessageDTO): Promise<number> => {

@@ -1,6 +1,7 @@
 CREATE TABLE tbl_users (
     id INT PRIMARY KEY AUTO_INCREMENT,
     user VARCHAR(99) UNIQUE,
+    password VARCHAR(99),
     INDEX idx_user(user)
 );
 

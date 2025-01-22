@@ -3,8 +3,8 @@ import { Router, Request, Response } from "express";
 
 // IMPORTED FILES
 import { getConversationService, getConversationsHeadsService, insertMessageService } from "../services/messageServices";
-import { insertMessageDTO } from "../dto/insertMessageDTO";
-import { getConversationDTO } from "../dto/getConversationDTO";
+import { insertMessageDTO } from "../dto/messageController/insertMessageDTO";
+import { getConversationDTO } from "../dto/messageController/getConversationDTO";
 
 const messageController = Router();
 
